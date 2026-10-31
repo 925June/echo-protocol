@@ -1,0 +1,17 @@
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor and IDE files
+.idea/
+.vscode/
+*.swp
+
+# Local browser and test artifacts
+.chrome-*/
+*.log
+*.tmp
+
+# Local screenshots that are not part of the showcase
+/dev-*.png

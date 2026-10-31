@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#060910" />
+    <meta
+      name="description"
+      content="《回响协议》是一款关于过去与现在协作的单人时间解谜小游戏。"
+    />
+    <title>回响协议 · Echo Protocol</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="page-glow page-glow-a" aria-hidden="true"></div>
+    <div class="page-glow page-glow-b" aria-hidden="true"></div>
+
+    <div id="app" class="app">
+      <header class="topbar">
+        <div class="brand" aria-label="回响协议">
+          <span class="brand-mark" aria-hidden="true">
+            <span></span>
+            <i></i>
+          </span>
+          <span class="brand-name">回响协议</span>
+          <span class="brand-en">ECHO PROTOCOL</span>
+        </div>
+        <div class="topbar-actions">
+          <span class="system-chip"><i></i> 时间线在线</span>
+          <button id="soundBtn" class="icon-button" type="button" aria-label="关闭声音">
+            <span id="soundIcon" aria-hidden="true">◖</span>
+            <span id="soundLabel">声音 开</span>
+          </button>
+        </div>
+      </header>
+
+      <main id="stage" class="stage">
+        <canvas id="gameCanvas" aria-label="回响协议游戏画面"></canvas>
+        <div class="stage-vignette" aria-hidden="true"></div>
+        <div class="stage-scanlines" aria-hidden="true"></div>
+
+        <section id="hud" class="hud" aria-label="游戏状态" hidden>
+          <div class="mission-card glass-panel">
+            <div class="panel-kicker">
+              <span id="chamberNumber">01</span>
+              <span class="kicker-slash">/</span>
+              <span>05</span>
+              <span class="kicker-line"></span>
+              <span>TIME CHAMBER</span>
+            </div>
+            <h2 id="levelTitle">双生练习</h2>
+            <p id="levelBrief">让 α、β 两个节点同时共振。</p>
+            <div id="nodeReadout" class="node-readout" aria-label="共振节点状态"></div>
+          </div>
+
+          <div class="loop-card glass-panel">
+            <div class="loop-card-heading">
+              <span>回溯窗口</span>
+              <strong id="loopTime">16.0</strong>
+            </div>
+            <div class="timeline-track" aria-hidden="true">
+              <div id="timeFill" class="timeline-fill"></div>
+              <span class="timeline-notch notch-a"></span>
+              <span class="timeline-notch notch-b"></span>
+              <span class="timeline-notch notch-c"></span>
+            </div>
+            <div class="loop-meta">
+              <span id="loopCount">循环 01 / 02</span>
+              <span id="recordingState"><i></i> 正在刻录</span>
+            </div>
+          </div>
+
+          <div class="echo-card glass-panel">
+            <div class="echo-heading">
+              <span>回响层</span>
+              <span id="echoCount">0 / 1</span>
+            </div>
+            <div id="echoSlots" class="echo-slots" aria-label="可用回声"></div>
+          </div>
+        </section>
+
+        <div id="worldToast" class="world-toast" role="status" aria-live="polite" hidden>
+          <span id="toastIcon" class="toast-icon">⌁</span>
+          <span id="toastText"></span>
+        </div>
+
+        <div id="syncBadge" class="sync-badge" hidden>
+          <div class="sync-copy">
+            <span>共振闭环</span>
+            <b id="syncPercent">0%</b>
+          </div>
+          <div class="sync-track"><div id="syncFill"></div></div>
+        </div>
+
+        <section id="startScreen" class="screen start-screen" aria-labelledby="gameTitle">
+          <div class="start-copy">
+            <div class="screen-kicker">
+              <span class="pulse-dot"></span>
+              SINGLE-PLAYER TEMPORAL CO-OP
+            </div>
+            <h1 id="gameTitle">
+              回响
+              <span>协议</span>
+            </h1>
+            <p class="tagline">你无法同时抵达所有地方。<br />但过去的你可以。</p>
+            <p class="start-description">
+              每次回溯都会留下一个重复你行动的回声。安排过去，指挥现在，
+              让所有共振节点在同一刻亮起。
+            </p>
+            <div class="mechanic-path" aria-label="玩法概览">
+              <div><b>01</b><span>行走</span></div>
+              <i>→</i>
+              <div><b>02</b><span>坍缩现在</span></div>
+              <i>→</i>
+              <div><b>03</b><span>与回声同步</span></div>
+            </div>
+            <div class="start-actions">
+              <button id="startBtn" class="primary-button" type="button">
+                <span>接入时间线</span>
+                <kbd>ENTER</kbd>
+              </button>
+              <span class="start-note">一次约 8–12 分钟 · 支持键盘与触屏</span>
+            </div>
+          </div>
+
+          <div class="start-art" aria-hidden="true">
+            <div class="art-coordinate coord-top">T − 00:16.00</div>
+            <div class="art-coordinate coord-bottom">MEMORY FIELD // 04</div>
+            <div class="orbit-ring orbit-ring-a"></div>
+            <div class="orbit-ring orbit-ring-b"></div>
+            <div class="orbit-ring orbit-ring-c"></div>
+            <div class="art-node art-node-a">α</div>
+            <div class="art-node art-node-b">β</div>
+            <div class="art-node art-node-c">γ</div>
+            <div class="art-echo echo-a"></div>
+            <div class="art-echo echo-b"></div>
+            <div class="art-player"></div>
+            <div class="art-scan"></div>
+            <div class="art-core"></div>
+            <div class="art-caption">
+              <span>过去</span>
+              <i></i>
+              <span>现在</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="interlude" class="screen compact-screen" aria-labelledby="clearTitle" hidden>
+          <div class="compact-card glass-panel">
+            <div class="screen-kicker"><span class="pulse-dot"></span> TEMPORAL LINK ESTABLISHED</div>
+            <h2 id="clearTitle">闭环建立</h2>
+            <p id="clearLine" class="compact-lead">你和过去的自己完成了第一次握手。</p>
+            <div class="result-grid">
+              <div><span>回声</span><b id="resultEchoes">1</b></div>
+              <div><span>用时</span><b id="resultTime">12.4s</b></div>
+              <div><span>折返</span><b id="resultResets">0</b></div>
+            </div>
+            <button id="nextBtn" class="primary-button" type="button">
+              <span>进入下一档案</span>
+              <kbd>ENTER</kbd>
+            </button>
+          </div>
+        </section>
+
+        <section id="ending" class="screen compact-screen" aria-labelledby="endingTitle" hidden>
+          <div class="compact-card glass-panel ending-card">
+            <div class="ending-seal" aria-hidden="true">
+              <span></span>
+              <i></i>
+            </div>
+            <div class="screen-kicker"><span class="pulse-dot"></span> ALL TIMELINES ALIGNED</div>
+            <h2 id="endingTitle">你就是最后一层回响</h2>
+            <p class="compact-lead">
+              你曾以为是在逃离循环。<br />直到所有回声同时回应，出口才真正出现。
+            </p>
+            <div class="result-grid ending-stats">
+              <div><span>总用时</span><b id="totalTime">00:00</b></div>
+              <div><span>回响</span><b id="totalEchoes">0</b></div>
+              <div><span>重开</span><b id="totalResets">0</b></div>
+            </div>
+            <button id="restartBtn" class="primary-button" type="button">
+              <span>重新接入</span>
+              <kbd>R</kbd>
+            </button>
+          </div>
+        </section>
+
+        <section id="pauseScreen" class="screen compact-screen" aria-labelledby="pauseTitle" hidden>
+          <div class="compact-card glass-panel pause-card">
+            <div class="screen-kicker">TIMELINE SUSPENDED</div>
+            <h2 id="pauseTitle">时间线暂停</h2>
+            <p class="compact-lead">过去暂时停下了。准备好就继续。</p>
+            <button id="resumeBtn" class="primary-button" type="button">
+              <span>继续同步</span>
+              <kbd>ESC</kbd>
+            </button>
+          </div>
+        </section>
+
+        <div id="liveStatus" class="sr-only" aria-live="assertive"></div>
+      </main>
+
+      <footer class="footer">
+        <div class="control-legend">
+          <span><kbd>WASD</kbd><em>移动</em></span>
+          <span><kbd>SPACE</kbd><em>坍缩现在</em></span>
+          <span><kbd>R</kbd><em>重置档案</em></span>
+          <span><kbd>ESC</kbd><em>暂停</em></span>
+        </div>
+        <p class="footer-quote">过去的每一步，都是现在的援军。</p>
+      </footer>
+
+      <div id="touchControls" class="touch-controls suspended" aria-label="触屏控制">
+        <div class="touch-pad">
+          <button type="button" data-direction="up" aria-label="向上">↑</button>
+          <button type="button" data-direction="left" aria-label="向左">←</button>
+          <button type="button" data-direction="down" aria-label="向下">↓</button>
+          <button type="button" data-direction="right" aria-label="向右">→</button>
+        </div>
+        <div class="touch-actions">
+          <button id="touchReset" class="touch-reset" type="button">重置</button>
+          <button id="touchCollapse" class="touch-collapse" type="button">坍缩现在</button>
+        </div>
+      </div>
+    </div>
+
+    <noscript>请启用 JavaScript 后运行《回响协议》。</noscript>
+    <script src="game.js"></script>
+  </body>
+</html>
